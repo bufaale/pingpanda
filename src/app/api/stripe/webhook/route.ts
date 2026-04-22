@@ -40,6 +40,15 @@ export async function POST(req: Request) {
 
   const supabase = createAdminClient();
 
+
+  // Stripe retries any non-2xx; event_id is PK on stripe_events_processed
+  // so a concurrent retry hits 23505 and short-circuits instead of re-running.
+  const { error: markErr } = await supabase
+    .from("stripe_events_processed")
+    .insert({ event_id: event.id, type: event.type });
+  if (markErr?.code === "23505") {
+    return NextResponse.json({ received: true, duplicate: true });
+  }
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
