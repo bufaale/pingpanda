@@ -30,7 +30,7 @@ const footerLinks = {
   social: {
     title: "Social",
     links: [
-      { label: "GitHub", href: siteConfig.links.github },
+      { label: "All products", href: siteConfig.links.parent },
       { label: "Twitter", href: siteConfig.links.twitter },
     ],
   },
