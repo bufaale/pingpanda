@@ -24,7 +24,7 @@ export function Hero() {
             <Link href="/signup">Start Monitoring Free</Link>
           </Button>
           <Button size="lg" variant="outline" asChild>
-            <Link href="/s/demo">See Demo Status Page</Link>
+            <Link href="/pricing">See pricing</Link>
           </Button>
         </div>
         <p className="mt-4 text-sm text-muted-foreground">

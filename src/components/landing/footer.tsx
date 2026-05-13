@@ -8,7 +8,7 @@ const footerLinks = {
     links: [
       { label: "Features", href: "#features" },
       { label: "Pricing", href: "#pricing" },
-      { label: "Demo Status Page", href: "/s/demo" },
+      { label: "Sign up free", href: "/signup" },
     ],
   },
   resources: {
