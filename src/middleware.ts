@@ -17,6 +17,14 @@ function isPublicRoute(pathname: string): boolean {
 }
 
 export async function middleware(request: NextRequest) {
+  // /auth/* paths must skip updateSession() — calling getUser() rotates
+  // the auth cookie and drops the PKCE code_verifier before /auth/confirm
+  // can exchange the OAuth code. See: project_supabase_oauth_middleware_pkce_trap.md
+  // Anti-pattern fix per ~/.claude/rules/common/portfolio-app-anti-patterns.md
+  if (request.nextUrl.pathname.startsWith("/auth/")) {
+    return setSecurityHeaders(NextResponse.next(), request);
+  }
+
   const { pathname } = request.nextUrl;
 
   // Block empty user-agents on API routes (scripts/bots)

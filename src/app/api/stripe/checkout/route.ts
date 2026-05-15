@@ -6,6 +6,20 @@ import { pricingPlans } from "@/lib/stripe/plans";
 export async function POST(req: Request) {
   const { priceId, mode = "subscription" } = await req.json();
 
+  // AUTH FIRST — check authentication before any price-ID validation.
+  // Doing validation before auth lets unauthenticated callers enumerate
+  // valid price IDs by comparing 400 (invalid) vs 401 (valid) responses.
+  // Anti-pattern fix per ~/.claude/rules/common/portfolio-app-anti-patterns.md
+  const supabase = await createClient();
+  const {
+  data: { user },
+  } = await supabase.auth.getUser();
+  
+  if (!user) {
+  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+
   // Validate mode
   if (mode !== "subscription" && mode !== "payment") {
     return NextResponse.json({ error: "Invalid mode" }, { status: 400 });
@@ -18,15 +32,6 @@ export async function POST(req: Request) {
 
   if (!validPriceIds.includes(priceId)) {
     return NextResponse.json({ error: "Invalid price" }, { status: 400 });
-  }
-
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   // Get or create Stripe customer
