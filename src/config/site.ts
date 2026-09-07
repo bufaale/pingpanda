@@ -6,6 +6,6 @@ export const siteConfig = {
   ogImage: "/og.png",
   links: {
     parent: "https://piposlab.com",
-    twitter: "https://twitter.com/piposlabs",
+    twitter: "https://x.com/PiposLab",
   },
 } as const;
