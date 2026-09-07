@@ -1,11 +1,10 @@
 name: E2E Tests
+# Nightly cron removed 2026-09-07 (CI health sweep): same webServer/Supabase-client failure ("Your project's URL and Key are required to create a Supabase client!"); workflow already auto-disabled by GitHub for inactivity.
 on:
   push:
     branches: [master, main]
   pull_request:
     branches: [master, main]
-  schedule:
-    - cron: "0 3 * * *"
   workflow_dispatch:
 jobs:
   e2e:
